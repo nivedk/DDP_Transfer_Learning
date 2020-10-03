@@ -9,13 +9,13 @@ from torchvision import datasets, transforms, models
 from torch.utils.tensorboard import SummaryWriter
 
 # To run the NN on GPU
-use_cuda = 0
+use_cuda = 1
 device = torch.device("cuda" if use_cuda else "cpu")
 
 #writer = SummaryWriter('runs/CNN_expt_1')
 
 # Hyperparameters
-batchSize = 32
+batchSize = 128
 lr = 0.001
 momentum = 0.9
 decayRate = 0.99
@@ -124,12 +124,12 @@ class forwardNet(nn.Module):
 
     def train(self, x, y,z):      # For training dataset
         out1 = self.modelStr(x)
-        print(type(out1))
+        #print(type(out1))
         out2 = self.modelHole(z)
         
-        print(type(out2))
+        #print(type(out2))
         out = torch.cat((out1,out2),1)
-        print("$$$$$$$$$$$$$$$$$$")
+        #print("$$$$$$$$$$$$$$$$$$")
         out = self.outputDecoder(out)
         
 
@@ -265,7 +265,8 @@ if __name__ == '__main__':
             x = Variable(x).to(device)
             y = Variable(y).to(device)
             z = Variable(z[0]).to(device)
-            loss, acc, out = forwardModel.eval(x, y, z)
+            with torch.no_grad():
+                loss, acc, out = forwardModel.eval(x, y, z)
             avgvalLoss += loss
             avgvalAcc += torch.mean(acc)
             if epoch %10 ==0:
