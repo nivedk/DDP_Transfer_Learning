@@ -265,12 +265,15 @@ if __name__ == '__main__':
             x = Variable(x).to(device)
             y = Variable(y).to(device)
             z = Variable(z[0]).to(device)
+            #To ensure CUDA overflow doesn't take place
             with torch.no_grad():
                 loss, acc, out = forwardModel.eval(x, y, z)
             avgvalLoss += loss
             avgvalAcc += torch.mean(acc)
             if epoch %10 ==0:
                 writeInFiles(out, y, x, epoch)
+
+        #fwnfjkernvjndbjnjdfbjn
 
         avgvalLoss = avgvalLoss/(iterx+1)
         avgvalAcc = avgvalAcc/(iterx+1)
